@@ -109,19 +109,12 @@ namespace ExpressCheckout.NET
             return bytes;
         }
         
-        public static string DropTrailingNullPadding(string text)
+        private static string DropTrailingNullPadding(string text)
         {
-            if (!string.IsNullOrWhiteSpace(text))
-            {
-                var charLocation = text.IndexOf('\0');
-
-                if (charLocation > 0)
-                {
-                    return text.Substring(0, charLocation);
-                }
-            }
-
-            return text;
+            if (string.IsNullOrWhiteSpace(text)) return text;
+            
+            var charLocation = text.IndexOf('\0');
+            return charLocation > 0 ? text.Substring(0, charLocation) : text;
         }
 
     }
