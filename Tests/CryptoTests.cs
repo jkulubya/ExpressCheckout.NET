@@ -1,6 +1,9 @@
 using System;
 using System.Security.Cryptography;
 using ExpressCheckout.NET;
+using ExpressCheckout.NET.Models;
+using FluentAssertions;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Tests
@@ -10,17 +13,17 @@ namespace Tests
         [Fact]
         public void CanEncrypt()
         {
-            var crypto = new Crypto("initialisation v", "53I4DRKVDQG76DEPDHNFZ2KT83DEDOWN");
-            var result = crypto.Encrypt("hello");
-            Assert.Equal("d22570c19fbb9f20b169accd108f5a0e", result);
+            var crypto = new Crypto(Constants.Iv, Constants.SecretKey);
+            var result = crypto.Encrypt("Hello World");
+            Assert.Equal("35b01339c0b01fcc80ec5bd4bc335282", result);
         }
         
         [Fact]
         public void CanDecrypt()
         {
-            var crypto = new Crypto("initialisation v", "53I4DRKVDQG76DEPDHNFZ2KT83DEDOWN");
-            var result = crypto.Decrypt("d22570c19fbb9f20b169accd108f5a0e");
-            Assert.Equal("hello", result);
+            var crypto = new Crypto(Constants.Iv, Constants.SecretKey);
+            var result = crypto.Decrypt("35b01339c0b01fcc80ec5bd4bc335282");
+            Assert.Equal("Hello World", result);
         }
     }
 }
