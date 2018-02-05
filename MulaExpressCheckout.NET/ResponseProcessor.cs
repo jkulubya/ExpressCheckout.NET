@@ -1,7 +1,7 @@
-﻿using ExpressCheckout.NET.Models;
+﻿using MulaExpressCheckout.NET.Models;
 using Newtonsoft.Json;
 
-namespace ExpressCheckout.NET
+namespace MulaExpressCheckout.NET
 {
     public class ResponseProcessor
     {

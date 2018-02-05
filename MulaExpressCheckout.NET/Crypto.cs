@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ExpressCheckout.NET
+namespace MulaExpressCheckout.NET
 {
     public class Crypto
     {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace ExpressCheckout.NET.Models
+namespace MulaExpressCheckout.NET.Models
 {
     public class PaymentRequest
     {

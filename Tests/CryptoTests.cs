@@ -1,8 +1,7 @@
 using System;
 using System.Security.Cryptography;
-using ExpressCheckout.NET;
-using ExpressCheckout.NET.Models;
 using FluentAssertions;
+using MulaExpressCheckout.NET;
 using Newtonsoft.Json;
 using Xunit;
 

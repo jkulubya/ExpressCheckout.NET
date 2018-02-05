@@ -10,6 +10,6 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExpressCheckout.NET\ExpressCheckout.NET.csproj" />
+    <ProjectReference Include="..\MulaExpressCheckout.NET\MulaExpressCheckout.NET.csproj" />
   </ItemGroup>
 </Project>

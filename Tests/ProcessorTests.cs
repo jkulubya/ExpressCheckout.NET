@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ExpressCheckout.NET;
-using ExpressCheckout.NET.Models;
 using FluentAssertions;
+using MulaExpressCheckout.NET;
+using MulaExpressCheckout.NET.Models;
 using Newtonsoft.Json;
 using Xunit;
 
