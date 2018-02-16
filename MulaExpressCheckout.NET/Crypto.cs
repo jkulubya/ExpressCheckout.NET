@@ -32,13 +32,13 @@ namespace MulaExpressCheckout.NET
             using (var aesAlg = Aes.Create())
             {
                 aesAlg.Mode = CipherMode.CBC;
-                aesAlg.KeySize = 128;
+                aesAlg.KeySize = 256;
                 aesAlg.BlockSize = 128;
-                aesAlg.Key = Encoding.UTF8.GetBytes(_key);
-                aesAlg.IV = Encoding.UTF8.GetBytes(_iv.Substring(0,16));
-                aesAlg.Padding = PaddingMode.Zeros;
+                aesAlg.Key = Encoding.UTF8.GetBytes(Sha256(_key).Substring(0, 32));
+                aesAlg.IV = Encoding.UTF8.GetBytes(Sha256(_iv).Substring(0, 16));
+                aesAlg.Padding = PaddingMode.PKCS7;
 
-                var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+                var encryptor = aesAlg.CreateEncryptor();
 
                 using (var msEncrypt = new MemoryStream())
                 {
@@ -53,24 +53,24 @@ namespace MulaExpressCheckout.NET
                 }
             }
 
-            return Bytes2Hex(encrypted);
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(Convert.ToBase64String(encrypted)));
         }
 
         public string Decrypt(string cipherText)
         {
             string plaintext = null;
-            var cypherBytes = Hex2Bytes(cipherText);
+            var cypherBytes = Convert.FromBase64String(Encoding.UTF8.GetString(Convert.FromBase64String(cipherText)));
 
             using (var aesAlg = Aes.Create())
             {
                 aesAlg.Mode = CipherMode.CBC;
-                aesAlg.KeySize = 128;
+                aesAlg.KeySize = 256;
                 aesAlg.BlockSize = 128;
-                aesAlg.Key = Encoding.UTF8.GetBytes(_key);
-                aesAlg.IV = Encoding.UTF8.GetBytes(_iv.Substring(0,16));
-                aesAlg.Padding = PaddingMode.Zeros;
+                aesAlg.Key = Encoding.UTF8.GetBytes(Sha256(_key).Substring(0, 32));
+                aesAlg.IV = Encoding.UTF8.GetBytes(Sha256(_iv).Substring(0, 16));
+                aesAlg.Padding = PaddingMode.PKCS7;
 
-                var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+                var decryptor = aesAlg.CreateDecryptor();
 
                 using (var msDecrypt = new MemoryStream(cypherBytes))
                 {
@@ -85,36 +85,24 @@ namespace MulaExpressCheckout.NET
 
             }
 
-            return DropTrailingNullPadding(plaintext);
+            return plaintext;
         }
 
-        private static string Bytes2Hex(byte[] input)
+        private static string Sha256(string value)
         {
-            var hex = new StringBuilder(input.Length * 2);
-            foreach (var b in input)
+            var sb = new StringBuilder();
+
+            using (var hash = SHA256.Create())            
             {
-                hex.AppendFormat("{0:x2}", b);
+                var result = hash.ComputeHash(Encoding.UTF8.GetBytes(value));
+
+                foreach (var b in result)
+                {
+                    sb.Append(b.ToString("x2"));
+                }
             }
-                
-            return hex.ToString();
-        }
 
-        private static byte[] Hex2Bytes(string input)
-        {
-            var numberChars = input.Length;
-            var bytes = new byte[numberChars / 2];
-            for (var i = 0; i < numberChars; i += 2)
-                bytes[i / 2] = Convert.ToByte(input.Substring(i, 2), 16);
-            return bytes;
+            return sb.ToString();
         }
-        
-        private static string DropTrailingNullPadding(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text)) return text;
-            
-            var charLocation = text.IndexOf('\0');
-            return charLocation > 0 ? text.Substring(0, charLocation) : text;
-        }
-
     }
 }
